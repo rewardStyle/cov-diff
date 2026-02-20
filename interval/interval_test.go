@@ -77,6 +77,28 @@ func TestUnion(t *testing.T) {
 				{Start: 5, End: 5},
 			},
 		},
+		{
+			name: "non-overlapping intervals should produce empty result",
+			a: []interval.Interval{
+				{Start: 90, End: 95},
+			},
+			b: []interval.Interval{
+				{Start: 80, End: 88},
+			},
+			e: []interval.Interval{},
+		},
+		{
+			name: "adjacent but non-overlapping intervals",
+			a: []interval.Interval{
+				{Start: 10, End: 20},
+				{Start: 50, End: 60},
+			},
+			b: []interval.Interval{
+				{Start: 21, End: 30},
+				{Start: 40, End: 49},
+			},
+			e: []interval.Interval{},
+		},
 	}
 
 	for _, tc := range testacses {

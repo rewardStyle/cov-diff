@@ -98,10 +98,13 @@ func Union(a []Interval, b []Interval) []Interval {
 			i++
 		}
 
-		result = append(result, Interval{
-			Start: start,
-			End:   end,
-		})
+		// Only append if the intervals actually overlap (start <= end)
+		if start <= end {
+			result = append(result, Interval{
+				Start: start,
+				End:   end,
+			})
+		}
 	}
 
 	return joinSortedIntervals(result)
