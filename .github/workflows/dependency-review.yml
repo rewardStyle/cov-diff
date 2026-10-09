@@ -10,9 +10,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - name: 'Checkout Repository'
-            uses: actions/checkout@v2
+          uses: actions/checkout@v2
         - name: Dependency Review
-            uses: github/dependency-review-action@v1
-            with:
-                # Possible values: "critical", "high", "moderate", "low"
-                fail-on-severity: 'high'
+          uses: github/dependency-review-action@v1
+          with:
+            # Possible values: "critical", "high", "moderate", "low"
+            fail-on-severity: 'high'
