@@ -60,3 +60,17 @@ jobs:
 ## Things to watch out for
 
 When generating the diff, keep in mind that the `target` branch will have commits that your `feature` branch won't. You'd normally get these changes if you merged the target branch into your feature branch right before opening the PR. In order to ignore these changes during the diff, you need to add the 3 dots (`...`) between the two branches (see example above). You can find the relevant documentation here: https://git-scm.com/docs/git-diff#Documentation/git-diff.txt-emgitdiffemltoptionsgtltcommitgtltcommitgt--ltpathgt82308203-1
+
+## Prebuilt LTK image
+
+The image workflow builds and smoke-tests `ghcr.io/rewardstyle/cov-diff` in hosted
+CI. Pull requests validate the image without publishing. Pushes to `main` publish
+the tested image with `sha-<full-commit-sha>` and `main` tags, using the repository's
+`GITHUB_TOKEN` rather than AWS credentials.
+
+Consumers can pin the published image by digest to avoid building the action's
+Dockerfile on each run. The existing `action.yaml` still uses its Dockerfile;
+switching consumers to the prebuilt image is a separate change after publication.
+
+New GHCR packages default to private. Anonymous pulls require the package to be
+made public explicitly; this workflow does not change package visibility.
