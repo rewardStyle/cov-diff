@@ -1,4 +1,4 @@
-FROM golang:1.21
+FROM mirror.gcr.io/library/golang:1.21
 
 WORKDIR /cov-diff
 COPY . /cov-diff
