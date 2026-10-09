@@ -1,0 +1,46 @@
+name: Build coverage image
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE: ghcr.io/rewardstyle/cov-diff
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: |
+          docker build \
+            --tag "$IMAGE:sha-$GITHUB_SHA" \
+            --tag "$IMAGE:main" \
+            --label "org.opencontainers.image.source=https://github.com/rewardStyle/cov-diff" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            .
+
+      - name: Smoke test image
+        run: docker run --rm "$IMAGE:sha-$GITHUB_SHA" cov-diff --help
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish tested image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          docker push "$IMAGE:sha-$GITHUB_SHA"
+          docker push "$IMAGE:main"

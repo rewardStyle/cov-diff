@@ -21,7 +21,7 @@ jobs:
 
       - name: self test
         id: selftest
-        uses: panagiotisptr/cov-diff@main
+        uses: ./
         with:
           path: .
           coverprofile: coverage.out
